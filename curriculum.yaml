@@ -1,0 +1,227 @@
+# Daily learning curriculum: API test automation frameworks & system design.
+# Practice target: api-bug-buddy (your own app). No UI / Playwright topics.
+# Topics are strictly ordered; tracks alternate frameworks / system-design.
+# Resources are official docs picked by hand. Click each once to verify.
+
+target:
+  name: api-bug-buddy
+  repo: https://github.com/suba-learning/api-bug-buddy
+  base_url: "https://<your-deployed-url>"   # fill in
+  known_bugs:                               # active only for users with buggy_mode = true
+    - "PATCH /api/public/contacts/{id}: ignores the phone field ~50% of the time"
+    - "DELETE /api/public/contacts/{id}: returns 200 with a body instead of 204"
+    - "GET /api/public/contacts: ignores the sort param"
+    - "POST /api/public/contacts: accepts invalid emails ~50% of the time"
+
+topics:
+  - id: fw-01
+    track: frameworks
+    title: Framework anatomy
+    goal: Restructure a pytest suite for api-bug-buddy into clear layers (config, API client, fixtures, tests) so no test file calls requests directly.
+    task_budget: 2
+    resources:
+      - https://docs.pytest.org/en/stable/explanation/goodpractices.html
+      - https://requests.readthedocs.io/en/latest/user/advanced/
+
+  - id: sd-01
+    track: system-design
+    title: Test pyramid for an API service
+    goal: Write a one-page design note mapping which api-bug-buddy behaviors belong in unit, API, and contract tests, and where those boundaries blur.
+    task_budget: 1
+    resources:
+      - https://martinfowler.com/articles/practical-test-pyramid.html
+
+  - id: fw-02
+    track: frameworks
+    title: Settings endpoint and buggy-mode fixtures
+    goal: Add a PUT /api/public/settings endpoint to api-bug-buddy, then build clean_user and buggy_user pytest fixtures that use it.
+    task_budget: 2
+    resources:
+      - https://docs.pytest.org/en/stable/how-to/fixtures.html
+
+  - id: sd-02
+    track: system-design
+    title: Test data management and isolation
+    goal: Design and implement a strategy where every test creates its own uniquely named user and data and cleans up after itself, even on failure.
+    task_budget: 1
+    resources:
+      - https://docs.pytest.org/en/stable/how-to/fixtures.html#teardown-cleanup-aka-fixture-finalization
+
+  - id: fw-03
+    track: frameworks
+    title: Response schema validation with pydantic
+    goal: Model every api-bug-buddy response with pydantic and write a test that catches the DELETE-returns-200-with-body bug.
+    task_budget: 2
+    resources:
+      - https://docs.pydantic.dev/latest/
+
+  - id: sd-03
+    track: system-design
+    title: Contract testing concepts
+    goal: Explain in a short note when consumer-driven contracts beat end-to-end API tests, using api-bug-buddy's frontend and API as the example.
+    task_budget: 1
+    resources:
+      - https://martinfowler.com/articles/consumerDrivenContracts.html
+      - https://docs.pact.io/
+
+  - id: fw-04
+    track: frameworks
+    title: Pact contract tests in Python
+    goal: Write a consumer contract for the contacts endpoints with pact-python and verify it against the running api-bug-buddy provider.
+    task_budget: 2
+    resources:
+      - https://github.com/pact-foundation/pact-python
+      - https://docs.pact.io/
+
+  - id: sd-04
+    track: system-design
+    title: Auth and session reuse design
+    goal: Design token handling that logs in once per worker, refreshes or re-logs on expiry, and never leaks one user's token into another user's test.
+    task_budget: 1
+    resources:
+      - https://docs.pytest.org/en/stable/how-to/fixtures.html#fixture-scopes
+
+  - id: fw-05
+    track: frameworks
+    title: Mocking HTTP in unit tests
+    goal: Unit-test your API client layer with the responses library, covering timeouts, 500s, and malformed JSON without any network calls.
+    task_budget: 1
+    resources:
+      - https://github.com/getsentry/responses
+
+  - id: sd-05
+    track: system-design
+    title: Service virtualization
+    goal: Stand up a WireMock stub of api-bug-buddy and decide, in a short note, when a team should test against a virtual service instead of the real one.
+    task_budget: 1
+    resources:
+      - https://wiremock.org/docs/
+
+  - id: fw-06
+    track: frameworks
+    title: Parametrized and data-driven tests
+    goal: Build a data-driven test of invalid email formats loaded from a file, and make it reliably catch the accepts-invalid-email bug.
+    task_budget: 1
+    resources:
+      - https://docs.pytest.org/en/stable/how-to/parametrize.html
+
+  - id: sd-06
+    track: system-design
+    title: Flaky test root-cause taxonomy
+    goal: Classify flaky-test causes (timing, shared state, randomness, environment) and design a repeat-run check that proves the phone-field bug is intermittent.
+    task_budget: 2
+    resources:
+      - https://testing.googleblog.com/2016/05/flaky-tests-at-google-and-how-we.html
+      - https://github.com/pytest-dev/pytest-repeat
+
+  - id: fw-07
+    track: frameworks
+    title: Property-based testing with Hypothesis
+    goal: Use Hypothesis to generate contacts and assert properties (sort order holds, PATCH round-trips) that expose the sort and phone bugs.
+    task_budget: 2
+    resources:
+      - https://hypothesis.readthedocs.io/en/latest/
+
+  - id: sd-07
+    track: system-design
+    title: Retry strategy design
+    goal: Add transport-level retries with backoff to the API client, and document why assertion failures must never be retried.
+    task_budget: 1
+    resources:
+      - https://urllib3.readthedocs.io/en/stable/
+
+  - id: fw-08
+    track: frameworks
+    title: Custom pytest plugins and hooks
+    goal: Write a conftest plugin that adds a --buggy command-line flag and logs the slowest API calls at the end of the run.
+    task_budget: 2
+    resources:
+      - https://docs.pytest.org/en/stable/how-to/writing_plugins.html
+      - https://docs.pytest.org/en/stable/reference/reference.html#hooks
+
+  - id: sd-08
+    track: system-design
+    title: Framework config architecture
+    goal: Design layered config (defaults, environment file, environment variables, CLI) so the same suite runs against local and deployed api-bug-buddy unchanged.
+    task_budget: 1
+    resources:
+      - https://12factor.net/config
+
+  - id: fw-09
+    track: frameworks
+    title: Test reporting with Allure
+    goal: Generate an Allure report that attaches the request and response for every failing test.
+    task_budget: 1
+    resources:
+      - https://allurereport.org/docs/pytest/
+
+  - id: sd-09
+    track: system-design
+    title: Observability metrics for test suites
+    goal: Parse JUnit XML from several runs and compute pass rate, flake rate, and duration trend per test.
+    task_budget: 1
+    resources:
+      - https://sre.google/sre-book/monitoring-distributed-systems/
+
+  - id: fw-10
+    track: frameworks
+    title: Parallel execution with pytest-xdist
+    goal: Run the suite with pytest-xdist, find and fix any shared-state failures, and measure the speedup.
+    task_budget: 1
+    resources:
+      - https://pytest-xdist.readthedocs.io/en/stable/
+
+  - id: sd-10
+    track: system-design
+    title: Test environment topology
+    goal: Compare shared versus ephemeral environments by running api-bug-buddy's database locally with the Supabase CLI and noting the trade-offs.
+    task_budget: 1
+    resources:
+      - https://supabase.com/docs/guides/local-development
+
+  - id: fw-11
+    track: frameworks
+    title: CI with GitHub Actions
+    goal: Create a workflow that runs the suite on every push and nightly, uses secrets for credentials, and uploads JUnit and Allure artifacts.
+    task_budget: 2
+    resources:
+      - https://docs.github.com/en/actions
+
+  - id: sd-11
+    track: system-design
+    title: CI/CD test orchestration
+    goal: Design which tests gate a pull request, which run nightly, and which run only before a release, with a time budget for each stage.
+    task_budget: 1
+    resources:
+      - https://docs.github.com/en/actions/using-workflows/about-workflows
+
+  - id: fw-12
+    track: frameworks
+    title: Spec-driven API fuzzing
+    goal: Write an OpenAPI spec for api-bug-buddy and run Schemathesis against it to find responses that break the spec.
+    task_budget: 2
+    resources:
+      - https://schemathesis.readthedocs.io/
+
+  - id: sd-12
+    track: system-design
+    title: Framework extensibility for new protocols
+    goal: Design a client interface so the framework could add a GraphQL or WebSocket adapter without changing existing tests.
+    task_budget: 1
+    resources:
+      - https://docs.pytest.org/en/stable/how-to/writing_plugins.html
+
+  - id: fw-13
+    track: frameworks
+    title: Load testing basics with Locust
+    goal: Write a small Locust scenario for login and contact CRUD, run it at low user counts to stay within free-tier limits, and interpret the latency results.
+    task_budget: 1
+    resources:
+      - https://docs.locust.io/en/stable/
+
+  - id: cap-01
+    track: frameworks
+    title: "Capstone: mini end-to-end API framework"
+    goal: Assemble everything into one repo that runs in CI, catches all four buggy-mode defects, and produces a report.
+    task_budget: 3
+    resources: []

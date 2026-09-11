@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Reference only — not installed automatically.
+  To activate: copy this file to ~/Library/LaunchAgents/ and run
+    launchctl load ~/Library/LaunchAgents/com.subanarayanan.dailylearning.check.plist
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.subanarayanan.dailylearning.check</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>/Users/subanarayanan/Documents/test-automation-learning/scripts/check_completion.sh</string>
+    </array>
+
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>21</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/Users/subanarayanan/.local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
+
+    <key>StandardOutPath</key>
+    <string>/Users/subanarayanan/Documents/test-automation-learning/logs/launchd-check.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/subanarayanan/Documents/test-automation-learning/logs/launchd-check.log</string>
+
+    <key>RunAtLoad</key>
+    <false/>
+</dict>
+</plist>
