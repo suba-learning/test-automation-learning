@@ -7,6 +7,67 @@ target:
   name: api-bug-buddy
   repo: https://github.com/suba-learning/api-bug-buddy
   base_url: "https://<your-deployed-url>"   # fill in
+  api_reference:                            # current endpoints as implemented today
+    - method: POST
+      path: /api/public/users
+      auth: none
+      request_body: [firstName, lastName, email, password]
+      success_status: 201
+    - method: POST
+      path: /api/public/users/login
+      auth: none
+      request_body: [email, password]
+      success_status: 200
+    - method: POST
+      path: /api/public/users/logout
+      auth: "optional (Bearer token)"
+      request_body: []
+      success_status: 200
+    - method: GET
+      path: /api/public/users/me
+      auth: "required (Bearer token)"
+      request_body: []
+      success_status: 200
+    - method: PATCH
+      path: /api/public/users/me
+      auth: "required (Bearer token)"
+      request_body: [firstName, lastName, email]  # all optional, at least one required
+      success_status: 200
+    - method: DELETE
+      path: /api/public/users/me
+      auth: "required (Bearer token)"
+      request_body: []
+      success_status: 204
+    - method: GET
+      path: /api/public/contacts
+      auth: "required (Bearer token)"
+      request_body: []  # query params: search, sort (name|created), order (asc|desc)
+      success_status: 200
+    - method: POST
+      path: /api/public/contacts
+      auth: "required (Bearer token)"
+      request_body: [firstName, lastName, birthdate, email, phone, street1, street2, city, stateProvince, postalCode, country]  # firstName/lastName required, rest optional
+      success_status: 201
+    - method: GET
+      path: /api/public/contacts/{id}
+      auth: "required (Bearer token)"
+      request_body: []
+      success_status: 200
+    - method: PUT
+      path: /api/public/contacts/{id}
+      auth: "required (Bearer token)"
+      request_body: [firstName, lastName, birthdate, email, phone, street1, street2, city, stateProvince, postalCode, country]  # full replace; firstName/lastName required
+      success_status: 200
+    - method: PATCH
+      path: /api/public/contacts/{id}
+      auth: "required (Bearer token)"
+      request_body: [firstName, lastName, birthdate, email, phone, street1, street2, city, stateProvince, postalCode, country]  # any subset, at least one field
+      success_status: 200
+    - method: DELETE
+      path: /api/public/contacts/{id}
+      auth: "required (Bearer token)"
+      request_body: []
+      success_status: 204
   known_bugs:                               # active only for users with buggy_mode = true
     - "PATCH /api/public/contacts/{id}: ignores the phone field ~50% of the time"
     - "DELETE /api/public/contacts/{id}: returns 200 with a body instead of 204"

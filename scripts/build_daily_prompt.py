@@ -34,11 +34,20 @@ resources_str = "\n".join(f"- {r}" for r in resources) if resources else "(none 
 known_bugs = target.get("known_bugs") or []
 known_bugs_str = "\n".join(f"- {b}" for b in known_bugs) if known_bugs else "(none listed)"
 
+api_reference = target.get("api_reference") or []
+def _fmt_endpoint(e):
+    body = ", ".join(e.get("request_body") or []) or "(none)"
+    return (f"- {e.get('method', '')} {e.get('path', '')} | auth: {e.get('auth', '')} "
+            f"| body fields: {body} | success status: {e.get('success_status', '')}")
+api_reference_str = "\n".join(_fmt_endpoint(e) for e in api_reference) if api_reference else "(none listed)"
+
 prompt = f"""You are generating ONE day's learning task for a daily API test automation / system design tracker.
 
 Target application:
 - Name: {target.get('name', '')}
 - Repo: {target.get('repo', '')}
+- API reference (current endpoints as implemented today):
+{api_reference_str}
 - Known bugs (active in "Buggy Mode"):
 {known_bugs_str}
 
@@ -57,18 +66,21 @@ Write the response in Markdown with EXACTLY these sections, in this order, using
 State the topic id, the title, and the attempt number.
 
 ## Learn
-A mechanistic concept explanation of about 300 words, with one concrete analogy. Only reference or link URLs from the resources list above — never invent links.
+A code-along walkthrough, 15-20 minutes, that builds from an empty file. Break it into numbered steps. Each step adds ONE small concept, then shows: the exact code to type, the command to run it, the expected output (or expected error, then the fix), and one or two sentences on why it works. Start from the simplest working version and refactor toward the better design, rather than showing the final design first. Use only endpoints from the API reference above, never invented ones. Only reference or link URLs from the resources list above — never invent links.
 
 ## Task
-Exactly ONE task, scoped strictly to today's topic, completable in 30-60 minutes, using {target.get('name', 'the target app')} ({target.get('repo', '')}) as the practice target. If the attempt number is greater than 1, this task MUST go deeper than an earlier attempt would have (assume prior attempts already covered the basics of this topic) — do not repeat the same task.
+A "now you try it" exercise, 30-45 minutes, that extends the walkthrough and is NOT solved by it. Scoped strictly to today's topic, using {target.get('name', 'the target app')} ({target.get('repo', '')}) as the practice target. If the attempt number is greater than 1, this task MUST go deeper than an earlier attempt would have (assume prior attempts already covered the basics of this topic) — do not repeat the same task.
 
 ## Done When
 An unambiguous checklist. It MUST end with a git commit in this repo (test-automation-learning) whose commit message contains the topic id "{topic_id}". Code written for this task goes under exercises/{topic_id}/ in this repo. If the actual hands-on work happens in the {target.get('name', 'target')} repo instead, the final "done" step is committing a short note here under exercises/{topic_id}/ linking to that commit, with a commit message that still contains "{topic_id}".
 
+## Interview Questions
+3 questions a senior QA interview might ask on this topic. No answers.
+
 ## Notes
 Leave the body of this section empty.
 
-Output ONLY the Markdown for these five sections — no preamble, no postscript, no code fences around the whole thing.
+Output ONLY the Markdown for these six sections — no preamble, no postscript, no code fences around the whole thing.
 """
 
 with open(prompt_out, "w") as f:
