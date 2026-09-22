@@ -46,6 +46,7 @@ prompt = f"""You are generating ONE day's learning task for a daily API test aut
 Target application:
 - Name: {target.get('name', '')}
 - Repo: {target.get('repo', '')}
+- Base URL (use this as the API base URL in all code and commands — never localhost or a placeholder): {target.get('base_url', '')}
 - API reference (current endpoints as implemented today):
 {api_reference_str}
 - Known bugs (active in "Buggy Mode"):

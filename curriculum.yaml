@@ -6,7 +6,7 @@
 target:
   name: api-bug-buddy
   repo: https://github.com/suba-learning/api-bug-buddy
-  base_url: "https://<your-deployed-url>"   # fill in
+  base_url: "https://api-bug-buddy.lovable.app"
   api_reference:                            # current endpoints as implemented today
     - method: POST
       path: /api/public/users
