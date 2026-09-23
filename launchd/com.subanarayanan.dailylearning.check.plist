@@ -13,7 +13,7 @@
     <key>ProgramArguments</key>
     <array>
         <string>/bin/bash</string>
-        <string>/Users/subanarayanan/Documents/test-automation-learning/scripts/check_completion.sh</string>
+        <string>/Users/subanarayanan/dev/test-automation-learning/scripts/check_completion.sh</string>
     </array>
 
     <key>StartCalendarInterval</key>
@@ -31,10 +31,10 @@
     </dict>
 
     <key>StandardOutPath</key>
-    <string>/Users/subanarayanan/Documents/test-automation-learning/logs/launchd-check.log</string>
+    <string>/Users/subanarayanan/dev/test-automation-learning/logs/launchd-check.log</string>
 
     <key>StandardErrorPath</key>
-    <string>/Users/subanarayanan/Documents/test-automation-learning/logs/launchd-check.log</string>
+    <string>/Users/subanarayanan/dev/test-automation-learning/logs/launchd-check.log</string>
 
     <key>RunAtLoad</key>
     <false/>

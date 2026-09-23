@@ -6,6 +6,6 @@
 
 CLAUDE_BIN="/Users/subanarayanan/.local/bin/claude"
 PYTHON_BIN="/opt/homebrew/bin/python3"
-REPO_DIR="/Users/subanarayanan/Documents/test-automation-learning"
+REPO_DIR="/Users/subanarayanan/dev/test-automation-learning"
 export PATH="$(dirname "$CLAUDE_BIN"):$(dirname "$PYTHON_BIN"):/usr/bin:/bin:/usr/sbin:/sbin"
 unset ANTHROPIC_API_KEY   # force Claude Code subscription auth, never billed API
